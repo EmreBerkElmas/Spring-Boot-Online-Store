@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Marketplace</title>
+</head>
+<body>
+    <h1>Marketplace</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${items}">
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td>
+                    <form method="post" th:action="@{/basket/add}">
+                        <input type="hidden" name="id" th:value="${item.id}" />
+                        <input type="number" name="quantity" min="1" max="${item.quantity}" value="1" />
+                        <button type="submit">Add to basket</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+        
+    </table>
+    <a href="/basket">View basket</a>
+</body>
+</html>
