@@ -1,6 +1,6 @@
 # Spring Boot Online Store
 
-A full Spring Boot Online Store project. h2 used as database. Thymeleaf used for front-end.
+A full Spring Boot Online Store project. h2 used as database. Thymeleaf used for front-end. Working on "localhost:8080".
 Features:
 - Register-login-logout(with spring security)
 - Basket for buying selected items
