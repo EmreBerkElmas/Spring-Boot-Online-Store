@@ -9,6 +9,7 @@ import com.WebStore.Store.Web.Dto.UserRegistrationDto;
 
 public interface UserService extends UserDetailsService {
 
+	
    
 	Users save(UserRegistrationDto registrationDto);
 

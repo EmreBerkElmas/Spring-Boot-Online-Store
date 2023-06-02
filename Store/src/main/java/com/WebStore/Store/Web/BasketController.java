@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.WebStore.Store.Model.Item;
 import com.WebStore.Store.Repository.ItemRepository;
@@ -28,11 +29,16 @@ public class BasketController {
     }
 
     @PostMapping("/basket/add")
-    public String addToBasket(@RequestParam Long id, @RequestParam int quantity) {
-        Item item = itemRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid item ID: " + id));
+public String addToBasket(@RequestParam Long id, @RequestParam int quantity, RedirectAttributes redirectAttributes) {
+    Item item = itemRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid item ID: " + id));
+    if (quantity > item.getQuantity()) {
+        redirectAttributes.addFlashAttribute("error", "Quantity too high. enter acceptable value!");
+        return "redirect:/marketplace";
+    } else {
         basket.addItem(item, quantity);
-        return "redirect:/basket";
-    }
+    
+    return "redirect:/basket";}
+}
 
     @PostMapping("/basket/update")
     public String updateBasketItem(@RequestParam Long id, @RequestParam int quantity) {
@@ -42,9 +48,9 @@ public class BasketController {
     }
 
     @PostMapping("/basket/remove")
-    public String removeFromBasket(@RequestParam Long id, @RequestParam int quantity) {
+    public String removeFromBasket(@RequestParam Long id) {
         Item item = itemRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid item ID: " + id));
-        basket.removeItem(item,quantity);
+        basket.removeItem(item);
         return "redirect:/basket";
     }
 
@@ -60,6 +66,6 @@ public class BasketController {
         return "marketplace";
     }
 
-   
+    
     
 }

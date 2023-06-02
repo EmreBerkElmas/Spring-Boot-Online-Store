@@ -1,37 +1,143 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <title>Marketplace</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #555555;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th {
+            background-color: #212529;
+            color: #ffffff;
+            padding: 12px;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+        }
+
+        form {
+            display: inline-block;
+        }
+
+        .btn-add-to-basket {
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            padding: 8px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-add-to-basket:hover {
+            background-color: #218838;
+        }
+
+        .view-basket-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: 500;
+            color: #28a745;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .view-basket-link:hover {
+            color: #218838;
+        }
+    </style>
 </head>
 <body>
-    <h1>Marketplace</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="item : ${items}">
-                <td th:text="${item.name}"></td>
-                <td th:text="${item.price}"></td>
-                <td th:text="${item.quantity}"></td>
-                <td>
-                    <form method="post" th:action="@{/basket/add}">
-                        <input type="hidden" name="id" th:value="${item.id}" />
-                        <input type="number" name="quantity" min="1" max="${item.quantity}" value="1" />
-                        <button type="submit">Add to basket</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
+    <div class="container">
+        <h1>Marketplace</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.name}"></td>
+                    <td th:text="${item.price}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td>
+                        <form method="post" th:action="@{/basket/add}">
+                            <input type="hidden" name="id" th:value="${item.id}" />
+                            <input type="number" name="quantity" min="1" max="${item.quantity}" value="1" />
+                            <button class="btn-add-to-basket" type="submit">Add to Basket</button>
+                        </form>
+                        <div sec:authorize="hasAnyAuthority('ADMIN')">
+                            
+                            <form th:action="@{/admin/remove/{id}}" method="post">
+                                <input type="hidden" name="id" th:value="${item.id}" />
+                                <button class="btn btn-danger" type="submit">Remove Item</button>
+                            </form>
+                            <form method="GET" action="/admin/update">
+                                <input type="hidden" name="id" th:value="${item.id}" />
+                                <button class="btn btn-secondary" type="submit">Update Item</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <p th:text="${error}"></p>
+            </tbody>
+        </table>
+        <div>
+            <a th:href="@{/}" class="btn btn-primary">Return to Home Page</a>
+            
+    <br>
+    <br>
+        </div>
         
-    </table>
-    <a href="/basket">View basket</a>
+        <div sec:authorize="hasAnyAuthority('ADMIN')">
+            <button class="btn btn-primary" onclick="window.location.href='/admin/new'">New Item</button>
+        </div>
+        <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link btn btn-dark" th:href="@{/basket}">View Basket</a>
+                    </li>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -11,5 +11,7 @@ import com.WebStore.Store.Model.Item;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
+    void deleteById(long id);
+
     Optional<Item> findById(long id);
 }

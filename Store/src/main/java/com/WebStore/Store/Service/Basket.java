@@ -34,15 +34,14 @@ public class Basket {
         }
     }
 
-    public void removeItem(Item item, int quantity) {
+    public void removeItem(Item item) {
         if (items.containsKey(item)) {
-            int currentQuantity = items.get(item);
-            if (currentQuantity <= quantity) {
-                items.remove(item);
-            } else {
-                items.put(item, currentQuantity - quantity);
-            }
+            items.remove(item);
         }
+        else{
+            System.out.println("DEBuuuuugggggggggg");
+        }
+        
     }
 
     public void clear() {
@@ -65,5 +64,6 @@ public class Basket {
         return total;
     }
 
+    
 
 }
