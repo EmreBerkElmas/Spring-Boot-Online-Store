@@ -1,2 +1,2 @@
-# Online-Store-Login-Register
+# Spring Boot Online Store
 Demo version of online market registration
